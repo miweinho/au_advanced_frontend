@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { SimpleUser } from './user';
-import { HttpClient } from '@angular/common/http';
+import { tap, map } from 'rxjs/operators';
+import { LoginDto, AuthResponse } from './auth.models';
+import { HttpService } from '../http/http.service.ts';
 
 interface LoginResponse {
   token: string;
@@ -13,49 +13,43 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class Auth {
-  private baseUrl = 'https://assignment1.swafe.dk/';
+  private http = inject(HttpService);
   private readonly TOKEN_KEY = 'app_token';
   private readonly USER_KEY = 'app_user';
-  private userSubject = new BehaviorSubject<SimpleUser | null>(null);
-  user$ = this.userSubject.asObservable();
-  private loggedIn = true;
+  private _isLoggedIn$ = new BehaviorSubject<boolean>(this.hasToken());
+  isLoggedIn$ = this._isLoggedIn$.asObservable();
 
-  constructor(private http: HttpClient) {
-    this.retrieveCookies();
+  login(dto: LoginDto): Observable<void> {
+    return this.http.postText('login', dto).pipe(
+      tap((raw) => {
+        const token = raw?.toString();
+
+        this.setToken(token);
+        this._isLoggedIn$.next(true);
+      }),
+      map(() => void 0)
+    );
   }
 
-  private retrieveCookies() {
-    const rawUser = sessionStorage.getItem(this.USER_KEY);
-    const token = sessionStorage.getItem(this.TOKEN_KEY);
-    if (rawUser && token) {
-      try {
-        const user: SimpleUser = JSON.parse(rawUser);
-        this.userSubject.next(user);
-      } catch {
-        this.clearSession();
-      }
-    }
+  logout(): void {
+    this.clearToken();
+    this._isLoggedIn$.next(false);
+    // Optionally call a logout endpoint if your API needs it.
   }
 
-  private clearSession() {
-    sessionStorage.removeItem(this.TOKEN_KEY);
-    sessionStorage.removeItem(this.USER_KEY);
-    this.userSubject.next(null);
-  }
-  public isLoggedIn() {
-    return this.loggedIn;
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  login(credentials: { username: string; password: string }): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(`${this.baseUrl}/api/Login`, credentials)
-      .pipe(tap((res) => this.setSession(res.username, res.token)));
+  private setToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
-  private setSession(username: string, token: string) {
-    const user: SimpleUser = { username };
-    sessionStorage.setItem(this.TOKEN_KEY, token);
-    sessionStorage.setItem(this.USER_KEY, JSON.stringify(user));
-    this.userSubject.next(user);
+  private clearToken(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+
+  private hasToken(): boolean {
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 }
