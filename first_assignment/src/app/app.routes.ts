@@ -7,9 +7,9 @@ import { Login } from './components/forms/login/login';
 import { TransacationList } from './components/screen/transacation-list/transacation-list';
 
 export const routes: Routes = [
-  { path: 'login', component: Login},
+  { path: 'login', component: Login },
   { path: '', component: Home, canActivate: [routeGuard] },
   { path: 'transactions', component: TransacationList, canActivate: [routeGuard] },
-  { path: 'card-detail', component: CardDetail, canActivate: [routeGuard] },
+  { path: 'card-detail/:cardNumber', component: CardDetail, canActivate: [routeGuard] },
   { path: 'add-card', component: AddCard, canActivate: [routeGuard] },
 ];
