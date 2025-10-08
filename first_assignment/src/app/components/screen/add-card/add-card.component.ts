@@ -11,7 +11,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   styleUrls: ['./add-card.component.css']
 })
-export class AddCard {
+export class AddCardComponent {
   cardForm: FormGroup;
   successMessage = '';
   errorMessage = '';
