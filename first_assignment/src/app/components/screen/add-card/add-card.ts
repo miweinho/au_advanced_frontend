@@ -1,112 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CardService } from './card.service';
 
 @Component({
   selector: 'app-add-card',
   templateUrl: './add-card.component.html',
   styleUrls: ['./add-card.component.css']
 })
-export class AddCardComponent implements OnInit {
+export class AddCardComponent {
   cardForm: FormGroup;
-  isSubmitting = false;
-  submitSuccess = false;
-  submitError = false;
+  successMessage = '';
   errorMessage = '';
+  apiUrl = 'https://assignment1.swafe.dk/api/CreditCard';
 
-  constructor(
-    private fb: FormBuilder,
-    private cardService: CardService
-  ) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.cardForm = this.fb.group({
-      card_number: ['', [
-        Validators.required,
-        Validators.pattern(/^\d+$/),
-        Validators.minLength(7),
-        Validators.maxLength(16)
-      ]],
-      cardholder_name: ['', Validators.required],
-      csc_code: ['', [
-        Validators.required,
-        Validators.pattern(/^\d{3}$/)
-      ]],
-      expiration_date_month: ['', [
-        Validators.required,
-        Validators.min(1),
-        Validators.max(12)
-      ]],
-      expiration_date_year: ['', Validators.required],
-      issuer: ['']
+      cardNumber: ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
+      cardHolder: ['', Validators.required],
+      expiryMonth: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
+      expiryYear: ['', [Validators.required, Validators.min(new Date().getFullYear())]],
+      cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
     });
   }
-
-  ngOnInit(): void {}
 
   onSubmit(): void {
-    if (this.cardForm.valid) {
-      this.isSubmitting = true;
-      this.submitSuccess = false;
-      this.submitError = false;
-      this.errorMessage = '';
-
-      this.cardService.addCard(this.cardForm.value).subscribe({
-        next: (response) => {
-          console.log('Card added successfully:', response);
-          this.submitSuccess = true;
-          this.isSubmitting = false;
-          this.cardForm.reset();
-
-          // Hide success message after 3 seconds
-          setTimeout(() => {
-            this.submitSuccess = false;
-          }, 3000);
-        },
-        error: (error) => {
-          console.error('Error adding card:', error);
-          this.submitError = true;
-          this.isSubmitting = false;
-          this.errorMessage = error.error?.message || 'Failed to add card. Please try again.';
-
-          // Hide error message after 5 seconds
-          setTimeout(() => {
-            this.submitError = false;
-          }, 5000);
-        }
-      });
-    } else {
-      console.log('Form is invalid');
-      this.markFormGroupTouched(this.cardForm);
+    if (this.cardForm.invalid) {
+      this.errorMessage = 'Please fill all fields correctly.';
+      this.successMessage = '';
+      return;
     }
-  }
 
-  private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
+    this.http.post(this.apiUrl, this.cardForm.value).subscribe({
+      next: () => {
+        this.successMessage = 'Card added successfully!';
+        this.errorMessage = '';
+        this.cardForm.reset();
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Failed to add card. Please try again.';
+        this.successMessage = '';
+      },
     });
   }
-
-  get card_number() {
-    return this.cardForm.get('card_number');
-  }
-
-  get cardholder_name() {
-    return this.cardForm.get('cardholder_name');
-  }
-
-  get csc_code() {
-    return this.cardForm.get('csc_code');
-  }
-
-  get expiration_date_month() {
-    return this.cardForm.get('expiration_date_month');
-  }
-
-  get expiration_date_year() {
-    return this.cardForm.get('expiration_date_year');
-  }
-
-  get issuer() {
-    return this.cardForm.get('issuer');
-  }
 }
+
