@@ -1,14 +1,12 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router'
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-nav',
-  imports: [RouterLink],
+  standalone: true,
+  imports: [RouterLink, MatIconModule],
   templateUrl: './nav.html',
-  styleUrl: './nav.css'
+  styleUrls: ['./nav.css']
 })
-export class Nav {
-
-
-
-}
+export class Nav {}

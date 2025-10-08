@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { LoginDto, AuthResponse } from './auth.models';
-import { HttpService } from '../http/http.service.ts';
+
+import { HttpService } from '../http/http.service';
 
 interface LoginResponse {
   token: string;

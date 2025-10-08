@@ -1,5 +1,27 @@
-<ul class="nav-list">
-  <li><a routerLink="add-card">Add Card</a></li>
-  <li><a routerLink="">Home</a></li>
-  <li><a routerLink="transactions">Transactions</a></li>
-</ul>
+<nav class="sidebar">
+  <div class="logo">
+    <mat-icon class="logo-icon">dashboard</mat-icon>
+    <span class="logo-text">Danish Bank</span>
+  </div>
+
+  <ul class="nav-list">
+    <li>
+      <a routerLink="/" routerLinkActive="active">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/add-card" routerLinkActive="active">
+        <mat-icon>add_circle</mat-icon>
+        <span>Add Card</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/transactions" routerLinkActive="active">
+        <mat-icon>credit_card</mat-icon>
+        <span>Transactions</span>
+      </a>
+    </li>
+  </ul>
+</nav>
