@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgIf, NgFor, DatePipe, DecimalPipe } from '@angular/common';
 import { CardService } from './card.service';
@@ -9,15 +9,15 @@ import { CardService } from './card.service';
  */
 @Component({
   selector: 'app-card-detail',
-  standalone: true,
   imports: [NgIf, NgFor, DatePipe, DecimalPipe],
   templateUrl: './card-detail.html',
-  styleUrls: ['./card-detail.css']
+  styleUrls: ['./card-detail.css'],
 })
 export class CardDetail implements OnInit {
   private cardService = inject(CardService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   /** Selected card data */
   card: any = null;
@@ -43,11 +43,10 @@ export class CardDetail implements OnInit {
     this.loading = true;
 
     this.cardService.getCards().subscribe({
-      next: data => {
+      next: (data) => {
         console.log('All cards:', data);
-        this.card = data.find(
-          (c: any) => c.cardNumber.toString() === cardNumber
-        );
+        this.card = data.find((c: any) => c.cardNumber.toString() === cardNumber);
+        this.cdr.detectChanges();
 
         if (!this.card) {
           this.error = 'No credit card found.';
@@ -56,21 +55,23 @@ export class CardDetail implements OnInit {
 
           // Fetch card transactions
           this.cardService.getCardTransactions(cardNumber).subscribe({
-            next: txs => {
+            next: (txs) => {
               console.log('Transactions:', txs);
               this.transactions = txs;
+              this.cdr.detectChanges();
             },
-            error: err => console.error('Error loading transactions', err)
+            error: (err) => console.error('Error loading transactions', err),
           });
         }
 
         this.loading = false;
       },
-      error: err => {
+      error: (err) => {
         console.error('Error loading cards', err);
         this.error = 'Failed to load cards.';
         this.loading = false;
-      }
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -92,10 +93,10 @@ export class CardDetail implements OnInit {
           this.router.navigate(['/']);
         }, 300);
       },
-      error: err => {
+      error: (err) => {
         console.error('Error removing card', err);
         alert('Failed to remove card.');
-      }
+      },
     });
   }
 }

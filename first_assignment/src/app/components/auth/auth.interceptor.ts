@@ -8,8 +8,8 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
   // Clone the request to add the authentication header.
 
   const newReq = authToken ? req.clone({
-    headers: req.headers.append('X-Authentication-Token', authToken),
+    headers: req.headers.append('Authorization', `Bearer ${authToken}`),
   }) : req;
-  
+
   return next(newReq);
 }
