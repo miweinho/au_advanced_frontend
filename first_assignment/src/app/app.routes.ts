@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './components/screen/home/home';
 import { CardDetail } from './components/screen/card-detail/card-detail';
-import { AddCard } from './components/screen/add-card/add-card';
+import { AddCard } from './components/screen/add-card/add-card.component';
 import { routeGuard } from './components/security/route-guard';
 import { Login } from './components/forms/login/login';
 import { TransacationList } from './components/screen/transacation-list/transacation-list';

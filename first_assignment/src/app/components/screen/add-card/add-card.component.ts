@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-add-card',
   templateUrl: './add-card.component.html',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   styleUrls: ['./add-card.component.css']
 })
-export class AddCardComponent {
+export class AddCard {
   cardForm: FormGroup;
   successMessage = '';
   errorMessage = '';
