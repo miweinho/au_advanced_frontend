@@ -1,3 +1,126 @@
-<p>add-card works!</p>
+<div class="add-card-container">
+  <h2>Add Credit Card</h2>
 
+  <!-- Success Message -->
+  <div class="alert alert-success" *ngIf="submitSuccess">
+    ✓ Credit card added successfully!
+  </div>
 
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="submitError">
+    ✗ {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="cardForm" (ngSubmit)="onSubmit()">
+
+    <!-- Card Number -->
+    <div class="form-group">
+      <label for="card_number">Card Number *</label>
+      <input
+        type="text"
+        id="card_number"
+        formControlName="card_number"
+        class="form-control"
+        placeholder="Enter card number (7-16 digits)"
+        maxlength="16"
+        [class.valid]="card_number?.valid && card_number?.touched">
+      <div class="error-message" *ngIf="card_number?.invalid && card_number?.touched">
+        <span *ngIf="card_number?.errors?.['required']">Card number is required</span>
+        <span *ngIf="card_number?.errors?.['pattern']">Card number must contain only digits</span>
+        <span *ngIf="card_number?.errors?.['minlength']">Card number must be at least 7 digits</span>
+        <span *ngIf="card_number?.errors?.['maxlength']">Card number must not exceed 16 digits</span>
+      </div>
+    </div>
+
+    <!-- Cardholder Name -->
+    <div class="form-group">
+      <label for="cardholder_name">Cardholder Name *</label>
+      <input
+        type="text"
+        id="cardholder_name"
+        formControlName="cardholder_name"
+        class="form-control"
+        placeholder="Enter cardholder name"
+        [class.valid]="cardholder_name?.valid && cardholder_name?.touched">
+      <div class="error-message" *ngIf="cardholder_name?.invalid && cardholder_name?.touched">
+        <span *ngIf="cardholder_name?.errors?.['required']">Cardholder name is required</span>
+      </div>
+    </div>
+
+    <!-- CSC Code -->
+    <div class="form-group">
+      <label for="csc_code">CSC Code *</label>
+      <input
+        type="text"
+        id="csc_code"
+        formControlName="csc_code"
+        class="form-control"
+        placeholder="Enter 3-digit CSC code"
+        maxlength="3"
+        [class.valid]="csc_code?.valid && csc_code?.touched">
+      <div class="error-message" *ngIf="csc_code?.invalid && csc_code?.touched">
+        <span *ngIf="csc_code?.errors?.['required']">CSC code is required</span>
+        <span *ngIf="csc_code?.errors?.['pattern']">CSC code must be exactly 3 digits</span>
+      </div>
+    </div>
+
+    <!-- Expiration Date -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="expiration_date_month">Expiration Month *</label>
+        <input
+          type="number"
+          id="expiration_date_month"
+          formControlName="expiration_date_month"
+          class="form-control"
+          placeholder="MM"
+          min="1"
+          max="12"
+          [class.valid]="expiration_date_month?.valid && expiration_date_month?.touched">
+        <div class="error-message" *ngIf="expiration_date_month?.invalid && expiration_date_month?.touched">
+          <span *ngIf="expiration_date_month?.errors?.['required']">Month is required</span>
+          <span *ngIf="expiration_date_month?.errors?.['min'] || expiration_date_month?.errors?.['max']">
+            Month must be between 1 and 12
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="expiration_date_year">Expiration Year *</label>
+        <input
+          type="number"
+          id="expiration_date_year"
+          formControlName="expiration_date_year"
+          class="form-control"
+          placeholder="YYYY"
+          [class.valid]="expiration_date_year?.valid && expiration_date_year?.touched">
+        <div class="error-message" *ngIf="expiration_date_year?.invalid && expiration_date_year?.touched">
+          <span *ngIf="expiration_date_year?.errors?.['required']">Year is required</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Issuer -->
+    <div class="form-group">
+      <label for="issuer">Issuer</label>
+      <input
+        type="text"
+        id="issuer"
+        formControlName="issuer"
+        class="form-control"
+        placeholder="Enter card issuer (optional)">
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="cardForm.invalid || isSubmitting">
+        <span *ngIf="!isSubmitting">Add Card</span>
+        <span *ngIf="isSubmitting">Adding...</span>
+      </button>
+      <div class="form-status" *ngIf="cardForm.invalid && cardForm.touched">
+        <small>Please fill in all required fields correctly</small>
+      </div>
+    </div>
+
+  </form>
+</div>
