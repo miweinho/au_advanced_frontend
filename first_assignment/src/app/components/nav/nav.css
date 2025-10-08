@@ -1,5 +1,90 @@
-.nav-list {
+/* --- Sidebar Container --- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 16px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* --- Logo --- */
+.logo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #c2185b; /* destaque */
+}
+
+.logo-icon {
+  color: #c2185b;
+  font-size: 26px;
+}
+
+/* --- Navigation List --- */
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.nav-list li {
+  margin-bottom: 8px;
+}
+
+.nav-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-list a:hover {
+  background-color: #f3f3f3;
+}
+
+.nav-list a.active {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.nav-list a.active mat-icon {
+  color: #1976d2;
+}
+
+/* --- Icon style --- */
+mat-icon {
+  font-size: 22px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+/* --- Main content offset --- */
+main {
+  margin-left: 230px;
+  padding: 24px;
+  background-color: #fafafa;
+  min-height: 100vh;
 }

@@ -1,0 +1,67 @@
+.home-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: "Segoe UI", sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #1976d2;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.loading,
+.error {
+  text-align: center;
+  color: gray;
+  margin-top: 1rem;
+}
+
+.card-list {
+  list-style: none;
+  padding: 0;
+}
+
+.card-item {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+  font-size: 2rem;
+}
+
+.card-info {
+  flex-grow: 1;
+}
+
+.issuer {
+  font-weight: 600;
+  color: #1565c0;
+  font-size: 1.1rem;
+}
+
+.card-number {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.holder {
+  font-size: 0.9rem;
+  color: #555;
+}

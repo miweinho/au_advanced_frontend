@@ -1,1 +1,21 @@
-<p>home works!</p>
+<div class="home-container">
+  <h1>Your Credit Cards</h1>
+
+  <div *ngIf="loading" class="loading">Loading cards...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <ul class="card-list">
+    <li
+      *ngFor="let card of cards"
+      class="card-item"
+      (click)="goToDetails(card.cardNumber || card.card_number)"
+    >
+      <div class="card-icon">💳</div>
+      <div class="card-info">
+        <div class="issuer">{{ card.issuer }}</div>
+        <div class="card-number">{{ card.cardNumber || card.card_number }}</div>
+        <div class="holder">{{ card.cardHolderName || card.cardholder_name }}</div>
+      </div>
+    </li>
+  </ul>
+</div>
