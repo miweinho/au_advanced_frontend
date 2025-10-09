@@ -1,51 +1,41 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpService } from '../../http/http.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-add-card',
   templateUrl: './add-card.component.html',
-  imports: [CommonModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   styleUrls: ['./add-card.component.css']
 })
 export class AddCardComponent {
   cardForm: FormGroup;
   successMessage = '';
   errorMessage = '';
-  httpService = inject(HttpService);
+  apiUrl = 'https://assignment1.swafe.dk/api/CreditCard';
 
-
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.cardForm = this.fb.group({
       cardNumber: ['', [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
       cardHolder: ['', Validators.required],
       expiryMonth: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
       expiryYear: ['', [Validators.required, Validators.min(new Date().getFullYear())]],
       cvv: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(4)]],
-      issuer: ['', [Validators.required, Validators.maxLength(10)]]
+      issuer: ['',[Validators.required]]
     });
   }
 
-  async onSubmit(): Promise<void> {
+  onSubmit(): void {
     if (this.cardForm.invalid) {
       this.errorMessage = 'Please fill all fields correctly.';
       this.successMessage = '';
       return;
     }
 
-    const payload = {
-      cardNumber: this.cardForm.value.cardNumber,
-      cscCode: this.cardForm.value.cvv,
-      cardHolderName: this.cardForm.value.cardHolder,
-      expirationMonth: this.cardForm.value.expiryMonth,
-      expirationYear: this.cardForm.value.expiryYear,
-      issuer: this.cardForm.value.issuer
-    }
-    const jsonPayload = await JSON.stringify(payload);
-
-    this.httpService.post('CreditCard',jsonPayload).subscribe({
+    this.http.post(this.apiUrl, this.cardForm.value).subscribe({
       next: () => {
         this.successMessage = 'Card added successfully!';
         this.errorMessage = '';

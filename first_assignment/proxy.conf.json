@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://assignment1.swafe.dk",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
