@@ -18,8 +18,11 @@ export class CardService {
    * @returns {Observable<any[]>} Observable with list of cards
    */
   getCards(): Observable<any[]> {
-    console.log("gotCards")
     return this.httpService.get<any[]>('CreditCard', );
+  }
+
+  getCardByNumber(cardNumber: string): Observable<any> {
+    return this.httpService.get(`CreditCard/cardnumber?cardnumber=${cardNumber}`);
   }
 
   /**
@@ -28,7 +31,6 @@ export class CardService {
    * @returns {Observable<any[]>} Observable with list of transactions
    */
   getCardTransactions(cardNumber: string): Observable<any[]> {
-    console.log("Looking for transactions for cardNumber:", cardNumber)
     return this.httpService
       .get<any[]>('Transaction')
       .pipe(
@@ -49,4 +51,17 @@ export class CardService {
     const url = `CreditCard/cardnumber?cardnumber=${cardNumber}`;
     return this.httpService.delete<void>(url);
   }
+}
+
+export interface Card {
+  card_number: number;
+  csc_code: number;
+  cardholder_name: string;
+  expiration_date_mont: number;
+  expiration_date_year: number;
+  issuer: string;
+}
+
+export interface Transaction {
+
 }

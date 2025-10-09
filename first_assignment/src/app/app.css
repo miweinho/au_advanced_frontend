@@ -1,1 +1,7 @@
 
+.main-content {
+  margin-left: 230px;
+  padding: 24px;
+  background-color: #fafafa;
+  min-height: 100vh;
+}

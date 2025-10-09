@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgIf, NgFor, DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { CardService } from './card.service';
 
 /**
@@ -9,9 +9,9 @@ import { CardService } from './card.service';
  */
 @Component({
   selector: 'app-card-detail',
-  imports: [NgIf, NgFor, DatePipe, DecimalPipe],
+  imports: [DatePipe, DecimalPipe],
   templateUrl: './card-detail.html',
-  styleUrls: ['./card-detail.css'],
+  styleUrl: './card-detail.css',
 })
 export class CardDetail implements OnInit {
   private cardService = inject(CardService);
@@ -41,12 +41,13 @@ export class CardDetail implements OnInit {
     }
 
     this.loading = true;
+    this.cdr.detectChanges();
 
-    this.cardService.getCards().subscribe({
+    this.cardService.getCardByNumber(cardNumber).subscribe({
       next: (data) => {
-        console.log('All cards:', data);
-        this.card = data.find((c: any) => c.cardNumber.toString() === cardNumber);
+        this.card = data;
         this.cdr.detectChanges();
+        console.log(this.card);
 
         if (!this.card) {
           this.error = 'No credit card found.';
@@ -58,6 +59,7 @@ export class CardDetail implements OnInit {
             next: (txs) => {
               console.log('Transactions:', txs);
               this.transactions = txs;
+              console.log(txs);
               this.cdr.detectChanges();
             },
             error: (err) => console.error('Error loading transactions', err),
