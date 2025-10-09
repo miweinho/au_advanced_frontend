@@ -1,1 +1,110 @@
-<p>transacation-list works!</p>
+<div class="transaction-container">
+  <div class="action-bar">
+    <button type="button" class="add-transaction-btn" (click)="toggleAddForm()">
+      {{ showAddForm() ? 'Cancel' : 'Add Transaction' }}
+    </button>
+    <button type="button" class="trigger-reload-btn" (click)="toggleManualReload()">
+      Reload
+    </button>
+  </div>
+
+  @if(showAddForm()) {
+    <app-transaction-form
+      (transactionAdded)="onTransactionAdded()"
+      (cancelled)="onAddCancelled()">
+    </app-transaction-form>
+  }
+
+  @if(filteredTransactions$ | async; as transactions) {
+    <table class="transactions-table">
+        <thead>
+        <tr>
+          <th>CardNumber</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Date</th>
+          <th>Comment</th>
+          <th>Remove</th>
+        </tr>
+        <!-- Filter Row -->
+        <tr class="filter-row">
+          <td>
+            <input
+              type="text"
+              [ngModel]="cardNumber()"
+              (ngModelChange)="cardNumber.set($event)"
+              placeholder="Filter card number">
+          </td>
+          <td>
+            <div class="amount-filters">
+              <input
+                type="number"
+                [ngModel]="amountMin()"
+                (ngModelChange)="amountMin.set($event)"
+                placeholder="Min"
+                class="amount-input">
+              <input
+                type="number"
+                [ngModel]="amountMax()"
+                (ngModelChange)="amountMax.set($event)"
+                placeholder="Max"
+                class="amount-input">
+            </div>
+          </td>
+          <td>
+            <select
+              [ngModel]="currency()"
+              (ngModelChange)="currency.set($event)">
+              <option [ngValue]="null">All</option>
+              <option value="MWK">MWK</option>
+              <option value="EUR">EUR</option>
+              <option value="CAD">CAD</option>
+              <option value="USD">USD</option>
+              <option value="KYD">KYD</option>
+              <option value="NAD">NAD</option>
+            </select>
+          </td>
+          <td>
+            <div class="date-filters">
+              <input
+                type="date"
+                [ngModel]="dateFrom()"
+                (ngModelChange)="dateFrom.set($event)"
+                class="date-input">
+              <input
+                type="date"
+                [ngModel]="dateTo()"
+                (ngModelChange)="dateTo.set($event)"
+                class="date-input">
+            </div>
+          </td>
+          <td>
+            <input
+              type="text"
+              [ngModel]="comment()"
+              (ngModelChange)="comment.set($event)"
+              placeholder="Search comment">
+          </td>
+          <td>
+            <button type="button" (click)="clearFilters()">Clear</button>
+          </td>
+        </tr>
+        </thead>
+        <tbody>
+        @for (tx of transactions; track $index) {
+          <tr>
+            <td>{{ tx.cardNumber}}</td>
+            <td>{{ tx.amount | number:'1.2-2' }}</td>
+            <td>{{ tx.currencyCode }}</td>
+            <td>{{ tx.transactionDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{tx.comment}}</td>
+            <td><button (click)="deleteTransaction(tx.uid)">X</button></td>
+          </tr>
+        }
+        </tbody>
+      </table>
+  }
+
+
+</div>
+
