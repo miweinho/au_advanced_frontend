@@ -1,0 +1,39 @@
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.transactions-table th,
+.transactions-table td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.no-tx {
+  font-style: italic;
+  color: #777;
+}
+
+.remove-btn {
+  margin-top: 30px;
+  padding: 12px 30px;
+  background-color: #ff4b4b;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 80%;
+  transition: background-color 0.3s;
+}
+
+.remove-btn:hover {
+  background-color: #e63939;
+}
+
+.trigger-reload-btn {
+  margin-left: 10px;
+
+}
