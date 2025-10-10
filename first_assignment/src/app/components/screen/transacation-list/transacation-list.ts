@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, Pipe, signal } from '@angular/core';
 import { Transaction, TransactionService } from '../../transaction/transaction-service';
 import { combineLatest, debounceTime, distinctUntilChanged, map, Observable, shareReplay, Subject, switchMap, startWith } from 'rxjs';
-import { AsyncPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { AsyncPipe, DatePipe, DecimalPipe, SlicePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { TransactionForm } from "../../transaction/transaction-form/transaction-form";
@@ -9,7 +9,7 @@ import { TransactionForm } from "../../transaction/transaction-form/transaction-
 
 @Component({
   selector: 'app-transacation-list',
-  imports: [AsyncPipe, DatePipe, DecimalPipe, FormsModule, TransactionForm],
+  imports: [AsyncPipe, DatePipe, DecimalPipe, FormsModule, SlicePipe, TransactionForm],
   templateUrl: './transacation-list.html',
   styleUrl: './transacation-list.css',
 })
