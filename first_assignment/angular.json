@@ -57,7 +57,8 @@
               "buildTarget": "first_assignment:build:production"
             },
             "development": {
-              "buildTarget": "first_assignment:build:development"
+              "buildTarget": "first_assignment:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

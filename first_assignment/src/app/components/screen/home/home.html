@@ -1,12 +1,13 @@
 <div class="home-container">
   <h1>Your Credit Cards</h1>
 
-  <div *ngIf="loading" class="loading">Loading cards...</div>
-  <div *ngIf="error" class="error">{{ error }}</div>
-
+  @if (loading){
+  <div class="loading">Loading cards...</div>
+  } @if (error) {
+  <div class="error">{{ error }}</div>
+  } @if (!loading && ! error){ @for (card of cards; track card.cardNumber) {
   <ul class="card-list">
     <li
-      *ngFor="let card of cards"
       class="card-item"
       (click)="goToDetails(card.cardNumber || card.card_number)"
     >
@@ -18,4 +19,5 @@
       </div>
     </li>
   </ul>
+  } }
 </div>

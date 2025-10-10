@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { HttpService } from '../../http/http.service';
 
 /**
  * Service for handling credit card and transaction API requests.
@@ -10,28 +10,19 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CardService {
-  private http = inject(HttpClient);
-  private readonly API_URL = 'https://assignment1.swafe.dk/api/CreditCard';
+  httpService = inject(HttpService);
 
-  /**
-   * Returns HTTP headers with authorization token.
-   * @returns {object} HTTP options with Authorization header
-   */
-  private getAuthHeaders() {
-    const token = localStorage.getItem('app_token');
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`
-      })
-    };
-  }
 
   /**
    * Fetches all credit cards.
    * @returns {Observable<any[]>} Observable with list of cards
    */
   getCards(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.API_URL}`, this.getAuthHeaders());
+    return this.httpService.get<any[]>('CreditCard', );
+  }
+
+  getCardByNumber(cardNumber: string): Observable<any> {
+    return this.httpService.get(`CreditCard/cardnumber?cardnumber=${cardNumber}`);
   }
 
   /**
@@ -40,12 +31,14 @@ export class CardService {
    * @returns {Observable<any[]>} Observable with list of transactions
    */
   getCardTransactions(cardNumber: string): Observable<any[]> {
-    return this.http
-      .get<any[]>(`https://assignment1.swafe.dk/api/Transaction`, this.getAuthHeaders())
+    return this.httpService
+      .get<any[]>('Transaction')
       .pipe(
         map(transactions =>
-          transactions.filter(t => t.cardNumber === Number(cardNumber))
-        )
+          transactions.filter(t => {
+            return t.cardNumber === Number(cardNumber);
+          })
+        ),
       );
   }
 
@@ -55,7 +48,20 @@ export class CardService {
    * @returns {Observable<void>} Observable for the delete operation
    */
   removeCard(cardNumber: string): Observable<void> {
-    const url = `${this.API_URL}/cardnumber?cardnumber=${cardNumber}`;
-    return this.http.delete<void>(url, this.getAuthHeaders());
+    const url = `CreditCard/cardnumber?cardnumber=${cardNumber}`;
+    return this.httpService.delete<void>(url);
   }
+}
+
+export interface Card {
+  card_number: number;
+  csc_code: number;
+  cardholder_name: string;
+  expiration_date_mont: number;
+  expiration_date_year: number;
+  issuer: string;
+}
+
+export interface Transaction {
+
 }

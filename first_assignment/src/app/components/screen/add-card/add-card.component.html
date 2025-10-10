@@ -1,0 +1,42 @@
+<div class="add-card-container">
+  <h2>Add New Credit Card</h2>
+
+  <form [formGroup]="cardForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Card Number</label>
+      <input type="text" formControlName="cardNumber" placeholder="1234 5678 9012 3456" />
+    </div>
+
+    <div class="form-group">
+      <label>Card Holder</label>
+      <input type="text" formControlName="cardHolder" placeholder="John Doe" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Expiry Month</label>
+        <input type="number" formControlName="expiryMonth" placeholder="MM" />
+      </div>
+
+      <div class="form-group">
+        <label>Expiry Year</label>
+        <input type="number" formControlName="expiryYear" placeholder="YYYY" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>CVV</label>
+      <input type="password" formControlName="cvv" placeholder="123" />
+    </div>
+    <div class="form-group">
+      <label>Issuer</label>
+      <input type="text" formControlName="issuer" placeholder="VISA" />
+    </div>
+
+    <button type="submit">Add Card</button>
+  </form>
+
+  <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>
+
